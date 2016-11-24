@@ -10,6 +10,9 @@ public:
 	Game();
 	~Game();
 
+	b2World *_world;
+	b2World *getWorld();
+
 private:
 	std::vector<Marble *> _marbles;
 	

@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL2_gfxPrimitives.h>
+#include <Box2D\Box2D.h>
 
 #include "Game.h"
 #include "Graphics.h"
@@ -23,13 +24,21 @@ Game::~Game() {
 	SDL_Quit();
 }
 
+b2World *Game::getWorld() {
+	return this->_world;
+}
+
 void Game::gameLoop() {
 	Graphics graphics; // creates SDL window and renderer
 	SDL_Event event;   // stores information about key events
 	Input input;	   // simplifies key event logic
 
-	this->_marbles.push_back(new Marble(50, 50, 28));
-	this->_marbles.push_back(new Marble(80, 50, 28));
+	// setup box2d game world
+	b2Vec2 gravity(0.0f, 0.1f);
+	this->_world = new b2World(gravity);
+
+	this->_marbles.push_back(new Marble(this->_world, 50, 50, 28));
+	this->_marbles.push_back(new Marble(this->_world, 200,50, 28));
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 	while (true) {
@@ -87,7 +96,11 @@ void Game::draw(Graphics &g) {
 }
 
 void Game::update(int elapsedTime) {
+	Logging::log(L"elapsed %d\n", elapsedTime);
+	this->_world->Step(0.02f, 100, 100);
+	/*
 	for (Marble *m : this->_marbles) {
 		m->update(elapsedTime);
 	}
+	*/
 }

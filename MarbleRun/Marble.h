@@ -4,11 +4,12 @@
 class Marble {
 public:
 	Marble();
-	Marble(float x, float y, float r);
+	Marble(b2World *world, float x, float y, float r);
 
 	void draw(Graphics &g);
 	void update(int elapsedTime);
 
 private:
-	float _x, _y, _r; // move x,y into Box2D Body
+	float  _r; // radius
+	b2Body *_body;
 };
