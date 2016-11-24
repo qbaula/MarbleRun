@@ -2,5 +2,5 @@
 
 class Logging {
 public:
-	void log(const wchar_t *fmt...);
+	static void log(const wchar_t *fmt...);
 };
