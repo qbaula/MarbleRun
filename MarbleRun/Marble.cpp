@@ -22,21 +22,23 @@ Marble::Marble(b2World *world, float x, float y, float r) : _r(r) {
 
 	// parameters that affect physics
 	fd->density = 1;
-	fd->friction = 0.01;
-	fd->restitution = 0.3;
+	fd->friction = 0.01f;
+	fd->restitution = 0.3f;
 
 	// attach fixture to body
 	this->_body->CreateFixture(fd);
 	this->_body->SetUserData(this);
+
+	this->_color = 0xF08080FF;
 }
 
 void Marble::draw(Graphics &g) {
 	SDL_Renderer *rend = g.getRenderer();
 	b2Vec2 pos = this->_body->GetPosition();
 
-	filledCircleRGBA(rend, 
+	filledCircleColor(rend, 
 					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) this->_r, 
-					 0, 0, 0, 255);
+					 this->_color);
 }
 
 void Marble::update(int elapsedTime) {

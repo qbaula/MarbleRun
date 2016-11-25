@@ -11,5 +11,7 @@ public:
 
 private:
 	float  _r; // radius
+
 	b2Body *_body;
+	uint32_t _color;
 };

@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "Level.h"
 #include "Logging.h"
 #include "Marble.h"
 
@@ -24,22 +25,12 @@ Game::~Game() {
 	SDL_Quit();
 }
 
-b2World *Game::getWorld() {
-	return this->_world;
-}
-
 void Game::gameLoop() {
 	Graphics graphics; // creates SDL window and renderer
 	SDL_Event event;   // stores information about key events
 	Input input;	   // simplifies key event logic
 
-	// setup box2d game world
-	b2Vec2 gravity(0.0f, 0.1f);
-	this->_world = new b2World(gravity);
-
-	this->_marbles.push_back(new Marble(this->_world, 50, 50, 28));
-	this->_marbles.push_back(new Marble(this->_world, 200,50, 28));
-
+	this->_level = nullptr;
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 	while (true) {
 		input.beginNewFrame();
@@ -63,7 +54,11 @@ void Game::gameLoop() {
 		}
 
 		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
-			Logging::log(L"Scanning image\n");
+			Logging::log(L"Creating new level\n");
+			if (this->_level != nullptr) {
+				delete this->_level;
+			}
+			this->_level = new Level();
 		}
 
 		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
@@ -84,9 +79,9 @@ void Game::gameLoop() {
 
 void Game::draw(Graphics &g) {
 	g.clear();
-
-	for (Marble *m : this->_marbles) {
-		m->draw(g);
+	
+	if (this->_level != nullptr) {
+		this->_level->draw(g);
 	}
 
 	pixelRGBA(g.getRenderer(),
@@ -96,11 +91,8 @@ void Game::draw(Graphics &g) {
 }
 
 void Game::update(int elapsedTime) {
-	Logging::log(L"elapsed %d\n", elapsedTime);
-	this->_world->Step(0.02f, 100, 100);
-	/*
-	for (Marble *m : this->_marbles) {
-		m->update(elapsedTime);
+	// Logging::log(L"elapsed %d\n", elapsedTime);
+	if (this->_level != nullptr) {
+		this->_level->update(elapsedTime);
 	}
-	*/
 }
