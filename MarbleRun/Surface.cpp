@@ -1,25 +1,31 @@
 #include <SDL2_gfxPrimitives.h>
+#include "Logging.h"
 #include "Surface.h"
 
-Surface::Surface() {
-	this->_density = 1;
-	this->_friction = 1;
-	this->_restitution = 0.5;
-	this->_color = 0x696969FF;
-}
+Surface::Surface() {}
 
-Surface::Surface(b2World *world, std::vector<b2Vec2 *> vertices) : Surface() {
-	this->_vertices = (b2Vec2 *) calloc(vertices.size(), sizeof(b2Vec2));
-	this->_vx = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
-	this->_vy = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
-	for (int i = 0; i < vertices.size(); i++) {
+Surface::Surface(std::vector<b2Vec2 *> vertices) {
+	this->_vertices = (b2Vec2 *)calloc(vertices.size(), sizeof(b2Vec2));
+	this->_vx = (int16_t *)calloc(vertices.size(), sizeof(int16_t));
+	this->_vy = (int16_t *)calloc(vertices.size(), sizeof(int16_t));
+	for (unsigned int i = 0; i < vertices.size(); i++) {
 		this->_vertices[i] = *(vertices[i]);
-		this->_vx[i] = (*(vertices[i])).x;
-		this->_vy[i] = (*(vertices[i])).y;
+		this->_vx[i] = (int16_t)(*(vertices[i])).x;
+		this->_vy[i] = (int16_t)(*(vertices[i])).y;
 	}
 	this->_numVertices = vertices.size();
+}
 
-	makeBody(world);
+StandardSurface::StandardSurface(b2World *world, std::vector<b2Vec2 *> vertices)
+	: Surface(vertices) {
+	this->setParams();
+	this->makeBody(world);
+}
+
+BouncySurface::BouncySurface(b2World *world, std::vector<b2Vec2 *> vertices)
+	: Surface(vertices) {
+	this->setParams();
+	this->makeBody(world);
 }
 
 Surface::~Surface() {
@@ -55,4 +61,20 @@ void Surface::makeBody(b2World *world) {
 	// attache fixture to body
 	this->_body->CreateFixture(fd);
 	this->_body->SetUserData(this);
+}
+
+void StandardSurface::setParams() {
+	Logging::log(L"Surface\n");
+	this->_density = 1;
+	this->_friction = 0.01;
+	this->_restitution = 0.2;
+	this->_color = 0x696969FF;
+}
+
+void BouncySurface::setParams() {
+	Logging::log(L"Bouncy Surface\n");
+	this->_density = 1;
+	this->_friction = 0.01;
+	this->_restitution = 0.9;
+	this->_color = 0x696969FF;
 }

@@ -91,7 +91,7 @@ void Game::draw(Graphics &g) {
 }
 
 void Game::update(int elapsedTime) {
-	Logging::log(L"elapsed %d\n", elapsedTime);
+	// Logging::log(L"elapsed %d\n", elapsedTime);
 	if (this->_level != nullptr) {
 		this->_level->update(elapsedTime);
 	}

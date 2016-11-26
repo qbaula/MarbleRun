@@ -6,12 +6,13 @@
 class Surface {
 public:
 	Surface();
-	Surface(b2World *world, std::vector<b2Vec2 *> vertices);
+	Surface(std::vector<b2Vec2 *> vertices);
 	~Surface();
 
 	void draw(Graphics &g);
+	virtual void setParams() = 0;
 
-private:
+protected:
 	// For Box2D
 	b2Vec2 *_vertices;
 	int32_t _numVertices;
@@ -27,4 +28,16 @@ private:
 	int16_t *_vy;
 
 	void makeBody(b2World *world);
+};
+
+class StandardSurface : public Surface {
+public:
+	StandardSurface(b2World *world, std::vector<b2Vec2 *> vertices);
+	void setParams();
+};
+
+class BouncySurface : public Surface {
+public:
+	BouncySurface(b2World *world, std::vector<b2Vec2 *> vertices);
+	void setParams();
 };

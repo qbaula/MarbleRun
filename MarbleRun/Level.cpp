@@ -13,7 +13,7 @@ Level::Level() {
 	vertices.push_back(new b2Vec2(300, 250));
 	vertices.push_back(new b2Vec2(200, 300));
 
-	this->_surfaces.push_back(new Surface(this->_world, vertices));
+	this->_surfaces.push_back(new BouncySurface(this->_world, vertices));
 }
 
 Level::~Level() {
