@@ -5,9 +5,9 @@ class Marble {
 public:
 	Marble();
 	Marble(b2World *world, float x, float y, float r);
+	~Marble();
 
 	void draw(Graphics &g);
-	void update(int elapsedTime);
 
 private:
 	float  _r; // radius

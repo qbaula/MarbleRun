@@ -1,0 +1,58 @@
+#include <SDL2_gfxPrimitives.h>
+#include "Surface.h"
+
+Surface::Surface() {
+	this->_density = 1;
+	this->_friction = 1;
+	this->_restitution = 0.5;
+	this->_color = 0x696969FF;
+}
+
+Surface::Surface(b2World *world, std::vector<b2Vec2 *> vertices) : Surface() {
+	this->_vertices = (b2Vec2 *) calloc(vertices.size(), sizeof(b2Vec2));
+	this->_vx = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
+	this->_vy = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
+	for (int i = 0; i < vertices.size(); i++) {
+		this->_vertices[i] = *(vertices[i]);
+		this->_vx[i] = (*(vertices[i])).x;
+		this->_vy[i] = (*(vertices[i])).y;
+	}
+	this->_numVertices = vertices.size();
+
+	makeBody(world);
+}
+
+Surface::~Surface() {
+	delete this->_vertices;
+	delete this->_vx;
+	delete this->_vy;
+}
+
+void Surface::draw(Graphics &g) {
+	SDL_Renderer *rend = g.getRenderer();
+
+	filledPolygonRGBA(rend,
+					   this->_vx, this->_vy, this->_numVertices, 
+					   105, 105, 105, 255);
+}
+
+void Surface::makeBody(b2World *world) {
+	b2BodyDef *bd = new b2BodyDef();
+	b2FixtureDef *fd = new b2FixtureDef();
+	b2ChainShape *chain = new b2ChainShape();
+
+	this->_body = world->CreateBody(bd);
+
+	// define fixture as a chain loop
+	chain->CreateLoop(this->_vertices, this->_numVertices);
+	fd->shape = chain;
+
+	// parameters that affect physics
+	fd->density = this->_density;
+	fd->friction = this->_friction;
+	fd->restitution = this->_restitution;
+
+	// attache fixture to body
+	this->_body->CreateFixture(fd);
+	this->_body->SetUserData(this);
+}

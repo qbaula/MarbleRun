@@ -1,0 +1,30 @@
+#pragma once
+#include <vector>
+#include <Box2D\Box2D.h>
+#include "Graphics.h"
+
+class Surface {
+public:
+	Surface();
+	Surface(b2World *world, std::vector<b2Vec2 *> vertices);
+	~Surface();
+
+	void draw(Graphics &g);
+
+private:
+	// For Box2D
+	b2Vec2 *_vertices;
+	int32_t _numVertices;
+	b2Body *_body;
+	uint32_t _color;
+
+	float _density;
+	float _friction;
+	float _restitution;
+
+	// SDL
+	int16_t *_vx;
+	int16_t *_vy;
+
+	void makeBody(b2World *world);
+};

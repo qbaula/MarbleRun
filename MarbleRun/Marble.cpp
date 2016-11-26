@@ -9,16 +9,19 @@ Marble::Marble() {}
 
 Marble::Marble(b2World *world, float x, float y, float r) : _r(r) {
 	b2BodyDef *bd = new b2BodyDef();
-	bd->position.Set(x, y);			 	 // set position
-	bd->type = b2_dynamicBody;			 // dynamic type, since it moves
-	this->_body = world->CreateBody(bd); // create the body
-
-	// define the fixture i.e. the phyiscal properties
 	b2FixtureDef *fd = new b2FixtureDef();
-	// make fixture circular
-	b2CircleShape *cs = new b2CircleShape();
-	cs->m_radius = r;
-	fd->shape = cs;
+	b2CircleShape *circle = new b2CircleShape();
+
+	// define body properties
+	bd->position.Set(x, y);		// set position
+	bd->type = b2_dynamicBody;	// dynamic type, since it moves
+	bd->allowSleep = true;
+	bd->awake = true;
+	this->_body = world->CreateBody(bd); // create the body
+	
+	// define fixture as circular
+	circle->m_radius = r;
+	fd->shape = circle;
 
 	// parameters that affect physics
 	fd->density = 1;
@@ -32,6 +35,10 @@ Marble::Marble(b2World *world, float x, float y, float r) : _r(r) {
 	this->_color = 0xF08080FF;
 }
 
+Marble::~Marble() {
+	
+}
+
 void Marble::draw(Graphics &g) {
 	SDL_Renderer *rend = g.getRenderer();
 	b2Vec2 pos = this->_body->GetPosition();
@@ -39,7 +46,4 @@ void Marble::draw(Graphics &g) {
 	filledCircleColor(rend, 
 					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) this->_r, 
 					 this->_color);
-}
-
-void Marble::update(int elapsedTime) {
 }

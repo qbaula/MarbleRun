@@ -155,6 +155,7 @@
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="Marble.cpp" />
     <ClCompile Include="MarbleRun.cpp" />
+    <ClCompile Include="Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="Marble.h" />
+    <ClInclude Include="Surface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

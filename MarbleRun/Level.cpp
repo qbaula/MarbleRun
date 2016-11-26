@@ -7,17 +7,32 @@ Level::Level() {
 
 	this->_marbles.push_back(new Marble(this->_world, 50, 50, 28));
 	this->_marbles.push_back(new Marble(this->_world, 200, 50, 28));
+
+	std::vector<b2Vec2 *> vertices;
+	vertices.push_back(new b2Vec2(0, 200));
+	vertices.push_back(new b2Vec2(300, 250));
+	vertices.push_back(new b2Vec2(200, 300));
+
+	this->_surfaces.push_back(new Surface(this->_world, vertices));
 }
 
 Level::~Level() {
 	for (Marble *m : this->_marbles) {
 		delete m;
 	}
+
+	for (Surface *s : this->_surfaces) {
+		delete s;
+	}
 }
 
 void Level::draw(Graphics &g) {
 	for (Marble *m : this->_marbles) {
 		m->draw(g);
+	}
+
+	for (Surface *s : this->_surfaces) {
+		s->draw(g);
 	}
 }
 
