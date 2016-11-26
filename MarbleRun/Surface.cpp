@@ -39,7 +39,7 @@ void Surface::draw(Graphics &g) {
 
 	filledPolygonRGBA(rend,
 					   this->_vx, this->_vy, this->_numVertices, 
-					   105, 105, 105, 255);
+					   this->_r, this->_g, this->_b, this->_a);
 }
 
 void Surface::makeBody(b2World *world) {
@@ -68,7 +68,10 @@ void StandardSurface::setParams() {
 	this->_density = 1;
 	this->_friction = 0.01;
 	this->_restitution = 0.2;
-	this->_color = 0x696969FF;
+	this->_r = 0xA0;
+	this->_g = 0xA0;
+	this->_b = 0xA0;
+	this->_a = 0xFF;
 }
 
 void BouncySurface::setParams() {
@@ -76,5 +79,8 @@ void BouncySurface::setParams() {
 	this->_density = 1;
 	this->_friction = 0.01;
 	this->_restitution = 0.9;
-	this->_color = 0x696969FF;
+	this->_r = 0x70;
+	this->_g = 0x80;
+	this->_b = 0x90;
+	this->_a = 0xF0;
 }

@@ -17,7 +17,6 @@ protected:
 	b2Vec2 *_vertices;
 	int32_t _numVertices;
 	b2Body *_body;
-	uint32_t _color;
 
 	float _density;
 	float _friction;
@@ -26,6 +25,10 @@ protected:
 	// SDL
 	int16_t *_vx;
 	int16_t *_vy;
+	uint8_t _r;
+	uint8_t _g;
+	uint8_t _b;
+	uint8_t _a;
 
 	void makeBody(b2World *world);
 };
