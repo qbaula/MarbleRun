@@ -1,5 +1,8 @@
 #pragma once
-#include "Graphics.h"
+
+class Graphics;
+class b2World;
+class b2Body;
 
 class Marble {
 public:

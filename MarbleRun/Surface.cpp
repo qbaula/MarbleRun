@@ -1,4 +1,6 @@
 #include <SDL2_gfxPrimitives.h>
+#include <Box2D\Box2D.h>
+#include "Graphics.h"
 #include "Logging.h"
 #include "Surface.h"
 
@@ -6,13 +8,15 @@ Surface::Surface() {}
 
 Surface::Surface(std::vector<b2Vec2 *> vertices) {
 	this->_vertices = (b2Vec2 *)calloc(vertices.size(), sizeof(b2Vec2));
-	this->_vx = (int16_t *)calloc(vertices.size(), sizeof(int16_t));
-	this->_vy = (int16_t *)calloc(vertices.size(), sizeof(int16_t));
+	this->_vx = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
+	this->_vy = (int16_t *) calloc(vertices.size(), sizeof(int16_t));
+
 	for (unsigned int i = 0; i < vertices.size(); i++) {
 		this->_vertices[i] = *(vertices[i]);
-		this->_vx[i] = (int16_t)(*(vertices[i])).x;
-		this->_vy[i] = (int16_t)(*(vertices[i])).y;
+		this->_vx[i] = (int16_t) vertices[i]->x;
+		this->_vy[i] = (int16_t) vertices[i]->y;
 	}
+
 	this->_numVertices = vertices.size();
 }
 
@@ -66,7 +70,7 @@ void Surface::makeBody(b2World *world) {
 void StandardSurface::setParams() {
 	Logging::log(L"Surface\n");
 	this->_density = 1;
-	this->_friction = 0.01;
+	this->_friction = 0.001;
 	this->_restitution = 0.2;
 	this->_r = 0xA0;
 	this->_g = 0xA0;

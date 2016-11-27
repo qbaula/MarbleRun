@@ -1,7 +1,11 @@
 #pragma once
+
 #include <vector>
-#include <Box2D\Box2D.h>
-#include "Graphics.h"
+
+class b2Vec2;
+class b2Body;
+class b2World;
+class Graphics;
 
 class Surface {
 public:
@@ -10,7 +14,6 @@ public:
 	~Surface();
 
 	void draw(Graphics &g);
-	virtual void setParams() = 0;
 
 protected:
 	// For Box2D
@@ -31,6 +34,7 @@ protected:
 	uint8_t _a;
 
 	void makeBody(b2World *world);
+	virtual void setParams() = 0;
 };
 
 class StandardSurface : public Surface {

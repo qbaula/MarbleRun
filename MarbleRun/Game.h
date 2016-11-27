@@ -1,10 +1,7 @@
 #pragma once
 
-#include <vector>
-#include <Box2D/Box2D.h>
-#include "Graphics.h"
-#include "Level.h"
-#include "Marble.h"
+class Level;
+class Graphics;
 
 class Game {
 public:
