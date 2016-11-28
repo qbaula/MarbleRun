@@ -18,6 +18,7 @@ public:
 	b2World *getWorld();
 
 	void addMarble(Marble *m);
+	void addSurface(Surface *s);
 	void addSpawner(Spawner *s);
 
 private:

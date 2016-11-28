@@ -15,13 +15,14 @@ namespace {
 }
 
 Game::Game() {
-	SDL_Init(SDL_INIT_EVERYTHING);
 	_running = true;
 	_level = nullptr;
+	SDL_Init(SDL_INIT_EVERYTHING);
 	gameLoop();
 }
 
 Game::~Game() {
+	quit();
 	SDL_Quit();
 }
 
@@ -56,7 +57,7 @@ void Game::draw(Graphics &g) {
 }
 
 void Game::update(int elapsedTime) {
-	// Logging::log(L"elapsed %d\n", elapsedTime);
+	Logging::log(L"elapsed %d\n", elapsedTime);
 	if (_level != nullptr) {
 		_level->update(elapsedTime);
 	}

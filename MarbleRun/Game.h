@@ -19,6 +19,7 @@ private:
 	void draw(Graphics &g);
 	void update(int elapsedTime);
 	void quit();
+
 	void recordKeyEvents(Input &input, SDL_Event &event);
 	void processKeyEvents(Input &input);
 	void createNewLevel();
