@@ -4,43 +4,54 @@
 #include "Marble.h"
 #include "Logging.h"
 
-Spawner::Spawner() {
-
-}
+Spawner::Spawner() {}
 
 Spawner::Spawner(Level *level, std::vector<b2Vec2 *> vertices) 
 	: Surface(vertices),
 	  _level(level) {
-	this->setParams();
-	this->_count = 0;
-
-	for (unsigned int i = 0; i < vertices.size(); i++) {
-		this->_spawn.x += vertices[i]->x;
-		this->_spawn.y += vertices[i]->y;
-	}
-
-	this->_spawn.x /= vertices.size();
-	this->_spawn.y /= vertices.size();
+	setColor(0xDC, 0x14, 0x3C, 0xF0);
+	initSpawner();
+	calcSpawnPoint(vertices);
 }
 
 void Spawner::update() {
 	_count += 1;
-	if (_count % 5000 == 0) {
+	if (_spawn_flag && _count % 5000 == 0) {
 		spawnMarble();
 		_count = 0;
 	}
 }
 
-void Spawner::spawnMarble() {
-	Marble *newMarble = new Marble(this->_level->getWorld(),
-								   50, 50, 28);
-	this->_level->addMarble(newMarble);
-
+void Spawner::startSpawning() {
+	_count = 0;
+	_spawn_flag = true;
+	spawnMarble();
 }
 
-void Spawner::setParams() {
-	this->_r = 0xDC;
-	this->_g = 0x14;
-	this->_b = 0x3C;
-	this->_a = 0xF0;
+void Spawner::stopSpawning() {
+	_spawn_flag = false;
+}
+
+void Spawner::initSpawner() {
+	_count = 0;
+	_spawn.x = 0;
+	_spawn.y = 0;
+	_spawn_flag = false;
+}
+
+void Spawner::calcSpawnPoint(std::vector<b2Vec2 *> vertices) {
+	for (unsigned int i = 0; i < vertices.size(); i++) {
+		_spawn.x += (uint32_t)vertices[i]->x;
+		_spawn.y += (uint32_t)vertices[i]->y;
+	}
+
+	_spawn.x /= vertices.size();
+	_spawn.y /= vertices.size();
+}
+
+void Spawner::spawnMarble() {
+	Logging::log(L"%d %d\n", _spawn.x, _spawn.y);
+	Marble *newMarble = new Marble(_level->getWorld(),
+								   (float) _spawn.x, (float) _spawn.y, 28);
+	_level->addMarble(newMarble);
 }

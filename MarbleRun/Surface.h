@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class b2Vec2;
+struct b2Vec2;
 class b2Body;
 class b2World;
 class Graphics;
@@ -33,18 +33,19 @@ protected:
 	uint8_t _b;
 	uint8_t _a;
 
+	void allocateVertexVariables(std::vector<b2Vec2 *> vertices);
+	void convertVectorToVertexVariables(std::vector<b2Vec2 *> vertices);
 	void makeBody(b2World *world);
-	virtual void setParams() = 0;
+	void setPhysics(float density, float friction, float restitution);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 };
 
 class StandardSurface : public Surface {
 public:
 	StandardSurface(b2World *world, std::vector<b2Vec2 *> vertices);
-	void setParams();
 };
 
 class BouncySurface : public Surface {
 public:
 	BouncySurface(b2World *world, std::vector<b2Vec2 *> vertices);
-	void setParams();
 };

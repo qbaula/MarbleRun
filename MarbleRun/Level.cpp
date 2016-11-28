@@ -10,13 +10,13 @@ Level::Level() {
 	this->_world = new b2World(gravity);
 
 	std::vector<b2Vec2 *> spawn_vertices;
+	spawn_vertices.push_back(new b2Vec2(35, 45));
 	spawn_vertices.push_back(new b2Vec2(45, 45));
-	spawn_vertices.push_back(new b2Vec2(55, 45));
-	spawn_vertices.push_back(new b2Vec2(55, 55));
 	spawn_vertices.push_back(new b2Vec2(45, 55));
+	spawn_vertices.push_back(new b2Vec2(35, 55));
 	
 	this->_spawners.push_back(new Spawner(this, spawn_vertices));
-	this->_spawners[0]->spawnMarble();
+	this->_spawners[0]->startSpawning();
 
 	//this->_marbles.push_back(new Marble(this->_world, 50, 50, 28));
 	//this->_marbles.push_back(new Marble(this->_world, 200, 50, 28));
@@ -66,7 +66,7 @@ void Level::draw(Graphics &g) {
 }
 
 void Level::update(int elapsedTime) {
-	this->_world->Step(0.02f, 100, 100);
+	this->_world->Step(0.05f, 100, 100);
 
 	// TODO: update marbles to delete offscreen ones
 	for (Spawner *s : this->_spawners) {
