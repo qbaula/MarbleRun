@@ -15,13 +15,13 @@ namespace {
 }
 
 Game::Game() {
-	//Start SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
-	this->gameLoop();
+	_running = true;
+	_level = nullptr;
+	gameLoop();
 }
 
 Game::~Game() {
-	//Quit SDL
 	SDL_Quit();
 }
 
@@ -30,58 +30,23 @@ void Game::gameLoop() {
 	SDL_Event event;   // stores information about key events
 	Input input;	   // simplifies key event logic
 
-	this->_level = nullptr;
-	int LAST_UPDATE_TIME = SDL_GetTicks();
-	while (true) {
+	_last_update_ms = SDL_GetTicks();
+	while (_running) {
 		input.beginNewFrame();
+		recordKeyEvents(input, event);
+		processKeyEvents(input);
 
-		if (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_KEYDOWN:
-				if (event.key.repeat == 0) {
-					input.keyDownEvent(event);
-				}
-				break;
-
-			case SDL_KEYUP:
-				input.keyUpEvent(event);
-				break;
-
-			case SDL_QUIT:
-				Logging::log(L"Exiting...\n");
-				return;
-			}
-		}
-
-		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
-			Logging::log(L"Creating new level\n");
-			if (this->_level != nullptr) {
-				delete this->_level;
-			}
-			this->_level = new Level();
-		}
-
-		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
-			Logging::log(L"Exiting...\n");
-			return;
-		}
-
-		
-		const int CURRENT_TIME_MS = SDL_GetTicks();
-		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-		
-		this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
-		LAST_UPDATE_TIME = CURRENT_TIME_MS;
-
-		this->draw(graphics);
+		int elapsed = updateTime();
+		update(std::min(elapsed, MAX_FRAME_TIME));
+		draw(graphics);
 	}
 }
 
 void Game::draw(Graphics &g) {
 	g.clear();
 	
-	if (this->_level != nullptr) {
-		this->_level->draw(g);
+	if (_level != nullptr) {
+		_level->draw(g);
 	}
 
 	pixelRGBA(g.getRenderer(),
@@ -92,7 +57,53 @@ void Game::draw(Graphics &g) {
 
 void Game::update(int elapsedTime) {
 	// Logging::log(L"elapsed %d\n", elapsedTime);
-	if (this->_level != nullptr) {
-		this->_level->update(elapsedTime);
+	if (_level != nullptr) {
+		_level->update(elapsedTime);
 	}
+}
+
+void Game::quit() {
+	_running = false;
+}
+
+void Game::recordKeyEvents(Input &input, SDL_Event &event) {
+	if (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_KEYDOWN:
+			if (event.key.repeat == 0) {
+				input.keyDownEvent(event);
+			}
+			break;
+
+		case SDL_KEYUP:
+			input.keyUpEvent(event);
+			break;
+		}
+	}
+}
+
+void Game::processKeyEvents(Input &input) {
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
+		createNewLevel();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
+		quit();
+	}
+}
+
+void Game::createNewLevel() {
+	Logging::log(L"Creating new level\n");
+	if (this->_level != nullptr) {
+		delete this->_level;
+	}
+	this->_level = new Level();
+}
+
+int Game::updateTime() {
+	int current = SDL_GetTicks();
+	int elapsed = current - _last_update_ms;
+	_last_update_ms = current;
+
+	return elapsed;
 }
