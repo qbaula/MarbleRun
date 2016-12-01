@@ -2,6 +2,7 @@
 #include <SDL2_gfxPrimitives.h>
 #include <Box2D\Box2D.h>
 
+#include "Camera.h"
 #include "Game.h"
 #include "Graphics.h"
 #include "Input.h"
@@ -30,12 +31,17 @@ void Game::gameLoop() {
 	Graphics graphics; // creates SDL window and renderer
 	SDL_Event event;   // stores information about key events
 	Input input;	   // simplifies key event logic
+	Camera camera;
+
+	if (!camera.isConnected()) {
+		Logging::log(L"No device connected\n");
+		return;
+	}
 
 	_last_update_ms = SDL_GetTicks();
 	while (_running) {
-		input.beginNewFrame();
-		recordKeyEvents(input, event);
-		processKeyEvents(input);
+		processInput(input, event);
+		camera.updateDisplay();
 
 		int elapsed = updateTime();
 		update(std::min(elapsed, MAX_FRAME_TIME));
@@ -65,6 +71,12 @@ void Game::update(int elapsedTime) {
 
 void Game::quit() {
 	_running = false;
+}
+
+void Game::processInput(Input &input, SDL_Event &event) {
+	input.beginNewFrame();
+	recordKeyEvents(input, event);
+	processKeyEvents(input);
 }
 
 void Game::recordKeyEvents(Input &input, SDL_Event &event) {

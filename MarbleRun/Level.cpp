@@ -61,7 +61,7 @@ void Level::draw(Graphics &g) {
 }
 
 void Level::update(int elapsedTime) {
-	_world->Step(0.05f, 100, 100);
+	_world->Step(0.08f, 100, 100);
 
 	auto end = _marbles.end();
 	for (auto iter = _marbles.begin(); iter < _marbles.end(); iter++) {

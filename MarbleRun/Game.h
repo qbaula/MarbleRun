@@ -20,6 +20,7 @@ private:
 	void update(int elapsedTime);
 	void quit();
 
+	void processInput(Input &input, SDL_Event &event);
 	void recordKeyEvents(Input &input, SDL_Event &event);
 	void processKeyEvents(Input &input);
 	void createNewLevel();

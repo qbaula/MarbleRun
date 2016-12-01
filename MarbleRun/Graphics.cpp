@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include "Graphics.h"
 
-extern const int SCREEN_WIDTH = 640;
-extern const int SCREEN_HEIGHT = 480;
+extern const int SCREEN_WIDTH = 930;
+extern const int SCREEN_HEIGHT = 720;
 
 Graphics::Graphics() {
 	SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, NULL, &this->_window, &this->_renderer);
