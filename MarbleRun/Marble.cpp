@@ -13,7 +13,7 @@ Marble::Marble() {}
 
 Marble::Marble(b2World *world, float x, float y, float r) : _world(world), _radius(r), _color(0xF08080FF) {
 	b2FixtureDef *fixture = createCircularFixture(r);
-	setFixturePhysics(fixture, 0.3f, 0.05f, 0.3f);
+	setFixturePhysics(fixture, 0.01f, 0.05f, 0.3f);
 	_body = createBody(world, x, y);
 	_body->CreateFixture(fixture);
 	_body->SetUserData(this);

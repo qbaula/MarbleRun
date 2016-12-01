@@ -1,9 +1,11 @@
 #pragma once
+#include <vector>
 
 class Camera;
 class Level;
 class Graphics;
 class Input;
+struct b2Vec2;
 union SDL_Event;
 
 class Game {
@@ -26,5 +28,7 @@ private:
 	void recordKeyEvents(Input &input, SDL_Event &event);
 	void processKeyEvents(Input &input);
 	void createNewLevel();
+	std::vector<b2Vec2 *> scaleVertices(std::vector<b2Vec2 *> vertices);
+	void createObject(std::vector<b2Vec2 *> vertices);
 	int updateTime();
 };

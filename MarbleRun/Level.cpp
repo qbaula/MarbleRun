@@ -9,27 +9,6 @@ Level::Level() {
 	// setup box2d game world
 	b2Vec2 gravity(0.0f, 0.1f);
 	this->_world = new b2World(gravity);
-
-	std::vector<b2Vec2 *> spawn_vertices;
-	spawn_vertices.push_back(new b2Vec2(35, 45));
-	spawn_vertices.push_back(new b2Vec2(45, 45));
-	spawn_vertices.push_back(new b2Vec2(45, 55));
-	spawn_vertices.push_back(new b2Vec2(35, 55));
-	_spawners.push_back(new Spawner(this, spawn_vertices));
-	_spawners[0]->startSpawning();
-	
-	std::vector<b2Vec2 *> vertices;
-	vertices.push_back(new b2Vec2(10, 170));
-	vertices.push_back(new b2Vec2(300, 250));
-	vertices.push_back(new b2Vec2(200, 300));
-	vertices.push_back(new b2Vec2(100, 275));
-	_surfaces.push_back(new StandardSurface(_world, vertices));
-
-	std::vector<b2Vec2 *> vertices2;
-	vertices2.push_back(new b2Vec2(300, 300));
-	vertices2.push_back(new b2Vec2(800, 300));
-	vertices2.push_back(new b2Vec2(500, 370));
-	_surfaces.push_back(new BouncySurface(_world, vertices2));
 }
 
 Level::~Level() {
@@ -94,4 +73,5 @@ void Level::addSurface(Surface * s) {
 
 void Level::addSpawner(Spawner *s) {
 	_spawners.push_back(s);
+	s->startSpawning();
 }

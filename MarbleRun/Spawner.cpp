@@ -12,7 +12,7 @@ Spawner::Spawner() {}
 Spawner::Spawner(Level *level, std::vector<b2Vec2 *> vertices) 
 	: Surface(vertices),
 	  _level(level) {
-	setColor(0xDC, 0x14, 0x3C, 0xF0);
+	setColor(0x70, 0x00, 0x00, 0x80);
 	initSpawner();
 	calcSpawnPoint(vertices);
 }

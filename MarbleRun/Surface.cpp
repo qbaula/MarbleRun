@@ -77,13 +77,13 @@ void Surface::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) 
 StandardSurface::StandardSurface(b2World *world, std::vector<b2Vec2 *> vertices)
 	: Surface(vertices) {
 	setPhysics(1.f, 0.001f, 0.4f);
-	setColor(0xA0, 0xA0, 0xA0, 0xFF);
+	setColor(0x00, 0x00, 0xCD, 0xFF);
 	makeBody(world);
 }
 
 BouncySurface::BouncySurface(b2World *world, std::vector<b2Vec2 *> vertices)
 	: Surface(vertices) {
-	setPhysics(1.f, 0.01f, 1.2f);
-	setColor(0x70, 0x80, 0x90, 0xF0);
+	setPhysics(1.f, 0.01f, 0.9f);
+	setColor(0x00, 0x60, 0x00, 0xF0);
 	makeBody(world);
 }

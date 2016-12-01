@@ -3,17 +3,23 @@
 #include <Box2D\Box2D.h>
 
 #include "Camera.h"
+#include "Color.h"
 #include "Game.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "Level.h"
 #include "Logging.h"
 #include "Marble.h"
+#include "Surface.h"
+#include "Spawner.h"
 
 namespace {
 	const int FPS = 60;
 	const int MAX_FRAME_TIME = 1000 / FPS;
 }
+
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 
 Game::Game() {
 	_running = true;
@@ -132,11 +138,55 @@ void Game::processKeyEvents(Input &input) {
 
 void Game::createNewLevel() {
 	Logging::log(L"Creating new level\n");
-	if (this->_level != nullptr) {
-		delete this->_level;
+	if (_level != nullptr) {
+		delete _level;
 	}
-	this->_level = new Level();
-	auto countors = _camera->getContours();
+	_level = new Level();
+	_camera->getContours();
+
+	// convert contours to b2Vec2* vectors
+	std::vector<std::vector<b2Vec2 *>> vertices;
+	for (size_t i = 0; i < _camera->_contours.size(); i++) {
+		std::vector<b2Vec2 *> c;
+		for (size_t j = 0; j < _camera->_contours[i].size(); j++) {
+			c.push_back(new b2Vec2((float)_camera->_contours[i][j].x, 
+								   (float)_camera->_contours[i][j].y));
+		}
+		vertices.push_back(c);
+	}
+
+	// scale vertices to match screen size
+	int bb_w = _camera->getBBWidth();
+	int bb_h = _camera->getBBHeight();
+	for (auto iterCont = vertices.begin(); iterCont < vertices.end(); iterCont++) {
+		if (iterCont->size() > 3) {
+			for (auto iterVert = iterCont->begin(); iterVert < iterCont->end(); iterVert++) {
+				(*iterVert)->x = ((float)(*iterVert)->x / bb_w) * SCREEN_WIDTH;
+				(*iterVert)->y = ((float)(*iterVert)->y / bb_h) * SCREEN_HEIGHT;
+			}
+		}
+ 	}
+
+	// create objects based on color
+	for (int i = 0; i < vertices.size(); i = i + 2) {
+		if (vertices[i].size() > 3) {
+			switch (_camera->_colors[i].mostColor()) {
+			case MOSTLY_RED:
+				_level->addSpawner(new Spawner(_level, vertices[i]));
+				break;
+			case MOSTLY_GREEN:
+			default:
+				_level->addSurface(new BouncySurface(_level->getWorld(), vertices[i]));
+				break;
+			case MOSTLY_BLUE:
+				_level->addSurface(new StandardSurface(_level->getWorld(), vertices[i]));
+				break;
+			}
+		}
+	}
+}
+
+void Game::createObject(std::vector<b2Vec2*> vertices) {
 }
 
 int Game::updateTime() {
