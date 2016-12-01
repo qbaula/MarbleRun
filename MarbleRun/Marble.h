@@ -19,6 +19,8 @@ private:
 	uint32_t _color;
 	float  _radius;
 
+	//void drawCircle(Graphics &g);
+	//void drawCircleDot(Graphics &g);
 	b2Body *createBody(b2World *world, float x, float y);
 	b2FixtureDef *createCircularFixture(float radius);
 	void setFixturePhysics(b2FixtureDef *fd, float density, float friction, float restitution);

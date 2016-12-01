@@ -27,7 +27,7 @@ Level::Level() {
 
 	std::vector<b2Vec2 *> vertices2;
 	vertices2.push_back(new b2Vec2(300, 300));
-	vertices2.push_back(new b2Vec2(640, 300));
+	vertices2.push_back(new b2Vec2(800, 300));
 	vertices2.push_back(new b2Vec2(500, 370));
 	_surfaces.push_back(new BouncySurface(_world, vertices2));
 }
@@ -61,7 +61,7 @@ void Level::draw(Graphics &g) {
 }
 
 void Level::update(int elapsedTime) {
-	_world->Step(0.08f, 100, 100);
+	_world->Step(0.07f, 100, 100);
 
 	auto end = _marbles.end();
 	for (auto iter = _marbles.begin(); iter < _marbles.end(); iter++) {

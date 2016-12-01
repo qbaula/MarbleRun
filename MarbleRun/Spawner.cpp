@@ -5,6 +5,7 @@
 #include "Logging.h"
 
 const int SPAWN_RATE = 2000;
+extern const int MARBLE_SIZE = 28;
 
 Spawner::Spawner() {}
 
@@ -54,6 +55,6 @@ void Spawner::calcSpawnPoint(std::vector<b2Vec2 *> vertices) {
 void Spawner::spawnMarble() {
 	Logging::log(L"%d %d\n", _spawn.x, _spawn.y);
 	Marble *newMarble = new Marble(_level->getWorld(),
-								   (float) _spawn.x, (float) _spawn.y, 28);
+								   (float) _spawn.x, (float) _spawn.y, MARBLE_SIZE);
 	_level->addMarble(newMarble);
 }

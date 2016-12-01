@@ -1,5 +1,6 @@
 #include <SDL2_gfxPrimitives.h>
 #include <Box2D\Box2D.h>
+#include <cmath>
 #include "Marble.h"
 #include "Game.h"
 #include "Graphics.h"
@@ -12,7 +13,7 @@ Marble::Marble() {}
 
 Marble::Marble(b2World *world, float x, float y, float r) : _world(world), _radius(r), _color(0xF08080FF) {
 	b2FixtureDef *fixture = createCircularFixture(r);
-	setFixturePhysics(fixture, 1, 0.01f, 0.3f);
+	setFixturePhysics(fixture, 0.3f, 0.05f, 0.3f);
 	_body = createBody(world, x, y);
 	_body->CreateFixture(fixture);
 	_body->SetUserData(this);
@@ -24,10 +25,19 @@ Marble::~Marble() {
 
 void Marble::draw(Graphics &g) {
 	SDL_Renderer *rend = g.getRenderer();
+
 	b2Vec2 pos = _body->GetPosition();
 	filledCircleColor(rend, 
 					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) _radius, 
 					 _color);
+
+	float angle = _body->GetAngle();	
+	filledCircleRGBA(rend,
+		(Sint16)pos.x + 0.67 * _radius * cos(angle), 
+		(Sint16)pos.y + 0.67 * _radius * sin(angle), 
+		(Sint16)_radius/10,
+		0, 0, 0, 0xFF);
+
 }
 
 bool Marble::update() {
