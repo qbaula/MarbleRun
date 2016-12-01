@@ -1,6 +1,9 @@
 #include <SDL.h>
 #include "Graphics.h"
 
+extern const int SCREEN_WIDTH = 640;
+extern const int SCREEN_HEIGHT = 480;
+
 Graphics::Graphics() {
 	SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, NULL, &this->_window, &this->_renderer);
 	SDL_SetWindowTitle(this->_window, "Marble Run");

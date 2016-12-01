@@ -11,10 +11,13 @@ public:
 	~Marble();
 
 	void draw(Graphics &g);
+	bool update();
 
 private:
-	float  _r; // radius
-
+	b2World *_world;
 	b2Body *_body;
 	uint32_t _color;
+	float  _radius;
+
+	bool outOfBounds(int xMax, int yMax);	
 };

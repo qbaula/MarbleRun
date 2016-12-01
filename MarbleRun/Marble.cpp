@@ -5,9 +5,12 @@
 #include "Graphics.h"
 #include "Logging.h"
 
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
+
 Marble::Marble() {}
 
-Marble::Marble(b2World *world, float x, float y, float r) : _r(r) {
+Marble::Marble(b2World *world, float x, float y, float r) : _world(world), _radius(r) {
 	b2BodyDef *bd = new b2BodyDef();
 	b2FixtureDef *fd = new b2FixtureDef();
 	b2CircleShape *circle = new b2CircleShape();
@@ -44,6 +47,25 @@ void Marble::draw(Graphics &g) {
 	b2Vec2 pos = this->_body->GetPosition();
 
 	filledCircleColor(rend, 
-					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) this->_r, 
+					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) this->_radius, 
 					 this->_color);
+}
+
+bool Marble::update() {
+	Logging::log(L"Marble::update()\n");
+	bool out = outOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT);
+	if (out) {
+		_world->DestroyBody(_body);
+	}
+
+	return out;
+}
+
+bool Marble::outOfBounds(int xMax, int yMax) {
+	b2Vec2 pos = _body->GetPosition();
+	if ((pos.x - _radius > xMax) || (pos.y - _radius > yMax)) {
+		return true;
+	}
+	
+	return false;
 }

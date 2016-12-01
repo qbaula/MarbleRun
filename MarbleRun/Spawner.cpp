@@ -4,6 +4,8 @@
 #include "Marble.h"
 #include "Logging.h"
 
+const int SPAWN_RATE = 2000;
+
 Spawner::Spawner() {}
 
 Spawner::Spawner(Level *level, std::vector<b2Vec2 *> vertices) 
@@ -16,7 +18,7 @@ Spawner::Spawner(Level *level, std::vector<b2Vec2 *> vertices)
 
 void Spawner::update() {
 	_count += 1;
-	if (_spawn_flag && _count % 5000 == 0) {
+	if (_spawn_flag && _count % SPAWN_RATE == 0) {
 		spawnMarble();
 		_count = 0;
 	}
