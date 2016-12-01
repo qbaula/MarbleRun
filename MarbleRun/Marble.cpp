@@ -10,32 +10,12 @@ extern const int SCREEN_HEIGHT;
 
 Marble::Marble() {}
 
-Marble::Marble(b2World *world, float x, float y, float r) : _world(world), _radius(r) {
-	b2BodyDef *bd = new b2BodyDef();
-	b2FixtureDef *fd = new b2FixtureDef();
-	b2CircleShape *circle = new b2CircleShape();
-
-	// define body properties
-	bd->position.Set(x, y);		// set position
-	bd->type = b2_dynamicBody;	// dynamic type, since it moves
-	bd->allowSleep = true;
-	bd->awake = true;
-	this->_body = world->CreateBody(bd); // create the body
-	
-	// define fixture as circular
-	circle->m_radius = r;
-	fd->shape = circle;
-
-	// parameters that affect physics
-	fd->density = 1;
-	fd->friction = 0.01f;
-	fd->restitution = 0.3f;
-
-	// attach fixture to body
-	this->_body->CreateFixture(fd);
-	this->_body->SetUserData(this);
-
-	this->_color = 0xF08080FF;
+Marble::Marble(b2World *world, float x, float y, float r) : _world(world), _radius(r), _color(0xF08080FF) {
+	b2FixtureDef *fixture = createCircularFixture(r);
+	setFixturePhysics(fixture, 1, 0.01f, 0.3f);
+	_body = createBody(world, x, y);
+	_body->CreateFixture(fixture);
+	_body->SetUserData(this);
 }
 
 Marble::~Marble() {
@@ -44,11 +24,10 @@ Marble::~Marble() {
 
 void Marble::draw(Graphics &g) {
 	SDL_Renderer *rend = g.getRenderer();
-	b2Vec2 pos = this->_body->GetPosition();
-
+	b2Vec2 pos = _body->GetPosition();
 	filledCircleColor(rend, 
-					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) this->_radius, 
-					 this->_color);
+					 (Sint16) pos.x, (Sint16) pos.y, (Sint16) _radius, 
+					 _color);
 }
 
 bool Marble::update() {
@@ -59,6 +38,30 @@ bool Marble::update() {
 	}
 
 	return out;
+}
+
+b2Body * Marble::createBody(b2World * world, float x, float y) {
+	b2BodyDef *bd = new b2BodyDef();	
+	bd->position.Set(x, y);
+	bd->type = b2_dynamicBody;
+	bd->allowSleep = true;
+	bd->awake = true;
+	return world->CreateBody(bd);
+}
+
+b2FixtureDef * Marble::createCircularFixture(float radius) {
+	b2FixtureDef *fd = new b2FixtureDef();
+	b2CircleShape *circle = new b2CircleShape();
+	circle->m_radius = radius;
+	fd->shape = circle;
+
+	return fd;
+}
+
+void Marble::setFixturePhysics(b2FixtureDef * fd, float density, float friction, float restitution) {
+	fd->density = density;
+	fd->friction = friction;
+	fd->restitution = restitution;
 }
 
 bool Marble::outOfBounds(int xMax, int yMax) {

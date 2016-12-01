@@ -19,5 +19,9 @@ private:
 	uint32_t _color;
 	float  _radius;
 
+	b2Body *createBody(b2World *world, float x, float y);
+	b2FixtureDef *createCircularFixture(float radius);
+	void setFixturePhysics(b2FixtureDef *fd, float density, float friction, float restitution);
+
 	bool outOfBounds(int xMax, int yMax);	
 };
