@@ -41,7 +41,7 @@ void Marble::draw(Graphics &g) {
 }
 
 bool Marble::update() {
-	Logging::log(L"Marble::update()\n");
+	// Logging::log(L"Marble::update()\n");
 	bool out = outOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (out) {
 		_world->DestroyBody(_body);

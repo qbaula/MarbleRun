@@ -70,7 +70,7 @@ void Game::draw(Graphics &g) {
 }
 
 void Game::update(int elapsedTime) {
-	Logging::log(L"elapsed %d\n", elapsedTime);
+	//Logging::log(L"elapsed %d\n", elapsedTime);
 	if (_level != nullptr) {
 		_level->update(elapsedTime);
 	}
@@ -137,7 +137,7 @@ void Game::processKeyEvents(Input &input) {
 }
 
 void Game::createNewLevel() {
-	Logging::log(L"Creating new level\n");
+	//Logging::log(L"Creating new level\n");
 	if (_level != nullptr) {
 		delete _level;
 	}
@@ -168,11 +168,12 @@ void Game::createNewLevel() {
  	}
 
 	// create objects based on color
-	for (int i = 0; i < vertices.size(); i = i + 2) {
+	for (int i = 0; i < vertices.size(); i++) {
 		if (vertices[i].size() > 3) {
 			switch (_camera->_colors[i].mostColor()) {
 			case MOSTLY_RED:
 				_level->addSpawner(new Spawner(_level, vertices[i]));
+				i++;
 				break;
 			case MOSTLY_GREEN:
 			default:

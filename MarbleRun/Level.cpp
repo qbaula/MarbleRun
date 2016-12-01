@@ -44,7 +44,7 @@ void Level::update(int elapsedTime) {
 
 	auto end = _marbles.end();
 	for (auto iter = _marbles.begin(); iter < _marbles.end(); iter++) {
-		Logging::log(L"Num marbles: #%d\n", _marbles.size());
+		// Logging::log(L"Num marbles: #%d\n", _marbles.size());
 		bool removed = (*iter)->update();
 		if (removed) {
 			iter = _marbles.erase(iter);
