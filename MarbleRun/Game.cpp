@@ -28,10 +28,11 @@ Game::~Game() {
 }
 
 void Game::gameLoop() {
+	Camera camera;
 	Graphics graphics; // creates SDL window and renderer
 	SDL_Event event;   // stores information about key events
 	Input input;	   // simplifies key event logic
-	Camera camera;
+	_camera = &camera;
 
 	if (!camera.isConnected()) {
 		Logging::log(L"No device connected\n");
@@ -103,6 +104,30 @@ void Game::processKeyEvents(Input &input) {
 	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
 		quit();
 	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_LEFT)) {
+		_camera->bbLeft();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_RIGHT)) {
+		_camera->bbRight();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_UP)) {
+		_camera->bbUp();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_DOWN)) {
+		_camera->bbDown();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_KP_PLUS)) {
+		_camera->bbIncreaseSize();
+	}
+
+	if (input.wasKeyPressed(SDL_SCANCODE_KP_MINUS)) {
+		_camera->bbDecreaseSize();
+	}
 }
 
 void Game::createNewLevel() {
@@ -111,6 +136,7 @@ void Game::createNewLevel() {
 		delete this->_level;
 	}
 	this->_level = new Level();
+	auto countors = _camera->getContours();
 }
 
 int Game::updateTime() {

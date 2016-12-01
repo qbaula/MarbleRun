@@ -6,8 +6,8 @@
 #include "Graphics.h"
 #include "Logging.h"
 
-extern const int SCREEN_WIDTH;
-extern const int SCREEN_HEIGHT;
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 
 Marble::Marble() {}
 
@@ -33,8 +33,8 @@ void Marble::draw(Graphics &g) {
 
 	float angle = _body->GetAngle();	
 	filledCircleRGBA(rend,
-		(Sint16)pos.x + 0.67 * _radius * cos(angle), 
-		(Sint16)pos.y + 0.67 * _radius * sin(angle), 
+		(Sint16)(pos.x + 0.67 * _radius * cos(angle)), 
+		(Sint16)(pos.y + 0.67 * _radius * sin(angle)), 
 		(Sint16)_radius/10,
 		0, 0, 0, 0xFF);
 

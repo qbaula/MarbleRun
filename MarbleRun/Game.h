@@ -1,5 +1,6 @@
 #pragma once
 
+class Camera;
 class Level;
 class Graphics;
 class Input;
@@ -11,6 +12,7 @@ public:
 	~Game();
 
 private:
+	Camera *_camera;
 	Level *_level;
 	int _last_update_ms;
 	bool _running;
